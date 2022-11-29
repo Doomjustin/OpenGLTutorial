@@ -10,7 +10,6 @@
 int main(int argc, char* argv[])
 {
   sil::Application* app = new sil::GuiApplication{};
-  app->exec(argc, argv);
-
-  return 0;
+  
+  return app->exec(argc, argv);
 }
