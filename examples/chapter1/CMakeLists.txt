@@ -1,5 +1,5 @@
 add_executable(hello-window hello_window.cpp)
-target_link_libraries(hello-window PRIVATE glfw glad::glad)
+target_link_libraries(hello-window PRIVATE glfw glad::glad Silence::Silence)
 
 SET_TARGET_PROPERTIES(hello-window 
   PROPERTIES 

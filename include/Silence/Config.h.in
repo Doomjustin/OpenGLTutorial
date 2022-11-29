@@ -1,0 +1,13 @@
+#ifndef OPENGL_TUTORIAL_SILENCE_CONFIG_H
+#define OPENGL_TUTORIAL_SILENCE_CONFIG_H
+
+
+namespace sil {
+
+static constexpr const char* RESOURCE_DIR = "@SILENCE_RESOURCE_DIR@";
+
+static constexpr const char* CONFIG_FILE_PATH = "@SILENCE_CONFIG_FILE@";
+  
+} // namespace sil 
+
+#endif // OPENGL_TUTORIAL_SILENCE_CONFIG_H 
