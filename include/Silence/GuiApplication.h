@@ -8,16 +8,19 @@
 #include <GLFW/glfw3.h>
 
 #include <string>
+#include <array>
 
 
 namespace sil {
 
 constexpr static const char* WINDOW_TITLE = "OpenGL Tutorial";
 
+constexpr static const std::array<float, 4> DEFAULT_COLOR{ 0.2f, 0.3f, 0.3f, 1.0f };
+
 
 class GuiApplication: public Application {
 public:
-  GuiApplication(const std::string& title = WINDOW_TITLE);
+  GuiApplication(const std::string& title = WINDOW_TITLE, const std::array<float, 4>& color = DEFAULT_COLOR);
 
   SIL_DISABLE_COPY(GuiApplication)
   
@@ -27,8 +30,11 @@ public:
 
   int exec(int argc, char* argv[]) override;
 
+  void clear_color(const std::array<float, 4> color) noexcept { clear_color_ = color; }
+
 private:
   GLFWwindow* window_;
+  std::array<float, 4> clear_color_;
 
   static int MajorVersion;
   static int MinirVersion;
@@ -39,8 +45,8 @@ private:
   static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
   void processInput();
-
   void tick();
+  void clear();
 };
   
 } // namespace sil 

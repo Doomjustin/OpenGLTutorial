@@ -22,10 +22,10 @@ void GuiApplication::framebuffer_size_callback(GLFWwindow* window, int width, in
   glViewport(0, 0, width, height);
 }
 
-
-GuiApplication::GuiApplication(const std::string& title)
+GuiApplication::GuiApplication(const std::string& title, const std::array<float, 4>& color)
   : Application{}, 
-    window_{ nullptr }
+    window_{ nullptr },
+    clear_color_{ color }
 {
   // glfw: initialize and configure
   // ------------------------------
@@ -38,7 +38,7 @@ GuiApplication::GuiApplication(const std::string& title)
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-  window_ = glfwCreateWindow(Width, Height, title.c_str(), NULL, NULL);
+  window_ = glfwCreateWindow(Width, Height, title.c_str(), nullptr, nullptr);
   if (window_ == nullptr) {
     SPDLOG_ERROR("Failed to create GLFW window");
     glfwTerminate();
@@ -77,16 +77,26 @@ void GuiApplication::tick()
 {
   processInput();
 
-  // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-  // -------------------------------------------------------------------------------
-  glfwSwapBuffers(window_);
-  glfwPollEvents();
+  // render
+  // ------
+  clear();
 }
 
 void GuiApplication::processInput()
 {
   if(glfwGetKey(window_, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     glfwSetWindowShouldClose(window_, true);
+}
+
+// render
+void GuiApplication::clear()
+{
+  glClearColor(clear_color_[0], clear_color_[1], clear_color_[2], clear_color_[3]);
+  glClear(GL_COLOR_BUFFER_BIT);
+  // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+  // -------------------------------------------------------------------------------
+  glfwSwapBuffers(window_);
+  glfwPollEvents();
 }
 
 } // namespace sil

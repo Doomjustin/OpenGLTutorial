@@ -16,7 +16,13 @@ add_library(Silence
     GuiApplication.h
     Utility.h    
     Config.h
+    FragmentShader.h
+    VertexShader.h
+    ShaderProgram.h
     GuiApplication.cpp
+    FragmentShader.cpp
+    VertexShader.cpp
+    ShaderProgram.cpp
 )
 
 target_link_libraries(Silence PRIVATE fmt::fmt spdlog::spdlog glfw glad::glad)
