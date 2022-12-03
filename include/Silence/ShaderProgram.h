@@ -11,6 +11,9 @@ namespace sil {
 class ShaderProgram {
 public:
   ShaderProgram(const std::string_view vertex_shader_file, const std::string_view fragment_shader_file);
+  ShaderProgram(unsigned int id)
+    : id_{ id }
+  {}
 
   SIL_DISABLE_COPY(ShaderProgram)
 
@@ -19,6 +22,8 @@ public:
   ~ShaderProgram();  
 
   constexpr unsigned int id() const noexcept { return id_; }
+  
+  void use();
 
 private:
   unsigned int id_;

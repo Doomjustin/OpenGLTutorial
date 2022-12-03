@@ -1,7 +1,9 @@
 #include "VertexShader.h"
+#include "Config.h"
+#include "Utility.h"
 
-#include <spdlog/spdlog.h>
 #include <glad/glad.h>
+#include <spdlog/spdlog.h>
 
 #include <fstream>
 
@@ -15,10 +17,19 @@ VertexShader::VertexShader(const std::string_view file)
     file_{ file },
     source_{}
 {
+  if (file_.starts_with(":"))
+    file_ = std::string{ RESOURCE_DIR } + '/' + trim(file_.substr(1));
+  else
+    file_ = trim(file_);
+
   std::fstream fs{ file_ };
   // 读出所有数据
-  while (fs)
-    fs >> source_;
+  std::string line;
+  while (fs) {
+    std::getline(fs, line);
+    source_ += (line + '\n');
+    line.clear();
+  }
   SPDLOG_INFO("Vertex Shader ID: {}", id_);
   SPDLOG_INFO("Vertex Shader Source: {}", source_);
 

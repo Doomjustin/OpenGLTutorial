@@ -40,5 +40,9 @@ ShaderProgram::~ShaderProgram()
   glDeleteProgram(id_);
 }
 
+void ShaderProgram::use()
+{
+  glUseProgram(id_);
+}
 
 } // namespace sil
