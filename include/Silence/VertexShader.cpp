@@ -6,6 +6,7 @@
 #include <spdlog/spdlog.h>
 
 #include <fstream>
+#include <sstream>
 
 
 namespace sil {
@@ -17,21 +18,27 @@ VertexShader::VertexShader(const std::string_view file)
     file_{ file },
     source_{}
 {
+  SPDLOG_INFO("Vertex Shader ID: {}", id_);
+  
   if (file_.starts_with(":"))
     file_ = std::string{ RESOURCE_DIR } + '/' + trim(file_.substr(1));
   else
     file_ = trim(file_);
 
-  std::fstream fs{ file_ };
+  std::fstream fs{};
+  std::stringstream source_ss{};
   // 读出所有数据
-  std::string line;
-  while (fs) {
-    std::getline(fs, line);
-    source_ += (line + '\n');
-    line.clear();
+  try {
+    fs.open(file_);
+    source_ss << fs.rdbuf();
+    fs.close();
   }
-  SPDLOG_INFO("Vertex Shader ID: {}", id_);
-  SPDLOG_INFO("Vertex Shader Source: {}", source_);
+  catch (std::ifstream::failure e) {
+    SPDLOG_ERROR("read file {} error", file_);
+    throw e;
+  }
+
+  source_ = source_ss.str();
 
   const char* source_code = source_.c_str();
   glShaderSource(id_, 1, &source_code, nullptr);
@@ -48,11 +55,13 @@ VertexShader::VertexShader(const std::string_view file)
     glDeleteShader(id_);
     throw "Vertex Shader compile error";
   }
+  SPDLOG_INFO("Vertex Shader[id={}] compile succeed", id_);
 }
 
 VertexShader::~VertexShader()
 {
   glDeleteShader(id_);
+  SPDLOG_INFO("Vertex Shader[id={}] deleted", id_);
 }
 
 } // namespace sil

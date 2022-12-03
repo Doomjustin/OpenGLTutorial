@@ -6,7 +6,7 @@
 #include <spdlog/spdlog.h>
 
 #include <fstream>
-
+#include <sstream>
 
 namespace sil {
 
@@ -17,22 +17,27 @@ FragmentShader::FragmentShader(const std::string_view shader_file)
     file_{ shader_file },
     source_{}
 {
+  SPDLOG_INFO("Fragment Shader ID: {}", id_);
+
   if (file_.starts_with(":"))
     file_ = std::string{ RESOURCE_DIR } + '/' + trim(file_.substr(1));
   else
     file_ = trim(file_);
 
-  std::fstream fs{ file_ };
+  std::fstream fs{};
+  std::stringstream source_ss{};
   // 读出所有数据
-  std::string line;
-  while (fs) {
-    std::getline(fs, line);
-    source_ += (line + '\n');
-    line.clear();
+  try {
+    fs.open(file_);
+    source_ss << fs.rdbuf();
+    fs.close();
+  }
+  catch (std::ifstream::failure e) {
+    SPDLOG_ERROR("read file {} error", file_);
+    throw e;
   }
 
-  SPDLOG_INFO("Fragment Shader ID: {}", id_);
-  SPDLOG_INFO("Fragment Shader Source: {}", source_);
+  source_ = source_ss.str();
 
   const char* source_code = source_.c_str();
   glShaderSource(id_, 1, &source_code, nullptr);
@@ -49,11 +54,13 @@ FragmentShader::FragmentShader(const std::string_view shader_file)
     glDeleteShader(id_);
     throw "Fragment Shader compile error";
   }
+  SPDLOG_INFO("Fragment Shader[id={}] compile succeed", id_);
 }
 
 FragmentShader::~FragmentShader()
 {
   glDeleteShader(id_);
+  SPDLOG_INFO("Vertex Shader[id={}] deleted", id_);
 }
 
 } // namespace sil

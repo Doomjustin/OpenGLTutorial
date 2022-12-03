@@ -45,4 +45,29 @@ void ShaderProgram::use()
   glUseProgram(id_);
 }
 
+void ShaderProgram::uniform(const std::string& name, bool value) const
+{
+  glUniform1i(glGetUniformLocation(id_, name.c_str()), static_cast<int>(value));
+}
+
+void ShaderProgram::uniform(const std::string& name, int value) const
+{
+  glUniform1i(glGetUniformLocation(id_, name.c_str()), value);
+}
+
+void ShaderProgram::uniform(const std::string& name, float value) const
+{
+  glUniform1f(glGetUniformLocation(id_, name.c_str()), value);
+}
+
+void ShaderProgram::uniform(const std::string& name, float x, float y, float z, float w)
+{
+  glUniform4f(glGetUniformLocation(id_, name.c_str()), x, y, z, w);
+}
+
+void ShaderProgram::uniform(const std::string& name, float x, float y, float z)
+{
+  glUniform3f(glGetUniformLocation(id_, name.c_str()), x, y, z);
+}
+
 } // namespace sil

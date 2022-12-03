@@ -3,3 +3,4 @@ target_link_libraries(base-template PRIVATE spdlog::spdlog glad::glad glfw fmt::
 
 add_subdirectory(chapter1)
 add_subdirectory(chapter2)
+add_subdirectory(chapter3)

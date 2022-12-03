@@ -25,6 +25,12 @@ public:
   
   void use();
 
+  void uniform(const std::string& name, bool value) const;
+  void uniform(const std::string& name, int value) const;
+  void uniform(const std::string& name, float value) const;
+  void uniform(const std::string& name, float x, float y, float z, float w);
+  void uniform(const std::string& name, float x, float y, float z);
+
 private:
   unsigned int id_;
 };
